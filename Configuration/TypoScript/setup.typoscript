@@ -1,1 +1,1 @@
-@import 'EXT:starter_twig_news/Configuration/TypoScript/Extension/Twig/'
+@import 'EXT:starter_twig_news/Configuration/TypoScript/Extension/Twig/ContentElement/'
