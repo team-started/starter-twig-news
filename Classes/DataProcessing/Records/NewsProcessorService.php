@@ -40,7 +40,11 @@ class NewsProcessorService
 
     public function process(News $newsRecord, array $processDataStatements, array $configuration = [], array $processorConfiguration = []): array
     {
-        $processedTwigViewData = $this->processDefaultProperties($newsRecord, $this->defaultProcessData);
+        $defaultProcessData = $this->modifyDefaultProcessFields(
+            $this->defaultProcessData,
+            $configuration['modifyDefaultProcessData'] ?? []
+        );
+        $processedTwigViewData = $this->processDefaultProperties($newsRecord, $defaultProcessData);
         ArrayUtility::mergeRecursiveWithOverrule($processDataStatements, $this->processData);
 
         foreach ($processDataStatements as $processDataStatement => $useProcessDataStatement) {
@@ -74,12 +78,21 @@ class NewsProcessorService
                 continue;
             }
 
-            $propertyGetter = 'get' . $property;
+            $propertyGetter = 'get' . ucfirst($property);
             if (method_exists($newsRecord, $propertyGetter)) {
                 $processedData[$property] = $newsRecord->$propertyGetter();
             }
         }
 
         return $processedData;
+    }
+
+    private function modifyDefaultProcessFields(array $defaultProcessFields, array $customProcessFields = []): array
+    {
+        if ($customProcessFields === []) {
+            return $defaultProcessFields;
+        }
+
+        return array_merge($defaultProcessFields, $customProcessFields);
     }
 }

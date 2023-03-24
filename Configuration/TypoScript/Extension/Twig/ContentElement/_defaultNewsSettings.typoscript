@@ -12,5 +12,12 @@ plugin.tx_news {
     }
 
     categoryLinkClass = {$tx_startertwignews.category.linkClass}
+
+    modifyDefaultProcessData {
+      // enable or disable default processField, e.g.
+      // uid = 0
+      // or add custom fields, e.g.
+      // myField = 1
+    }
   }
 }
