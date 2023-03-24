@@ -1,0 +1,7 @@
+plugin.tx_news {
+  settings {
+    dateMenu {
+      templateName = {$tx_startertwig.ceFolderName}/m77-newsdatemenu/m77-newsdatemenu.twig
+    }
+  }
+}

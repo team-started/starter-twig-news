@@ -1,0 +1,16 @@
+plugin.tx_news {
+  settings {
+    dateFormat = {$tx_startertwig.dateFormats.dateFormat}
+
+    // calendarFormat is a custom property
+    calendarFormat {
+      day = {$tx_startertwig.dateFormats.dateFormat.day}
+      dayOfWeek = {$tx_startertwig.dateFormats.calendarFormat.dayOfWeek}
+      month = {$tx_startertwig.dateFormats.calendarFormat.month}
+      monthOfYear = {$tx_startertwig.dateFormats.calendarFormat.monthOfYear}
+      year = {$tx_startertwig.dateFormats.calendarFormat.year}
+    }
+
+    categoryLinkClass = {$tx_startertwignews.category.linkClass}
+  }
+}

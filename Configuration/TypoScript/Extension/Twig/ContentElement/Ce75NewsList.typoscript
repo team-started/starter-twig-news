@@ -1,0 +1,45 @@
+plugin.tx_news {
+  settings {
+    list {
+      templateName = {$tx_startertwig.ceFolderName}/m75-newslist/m75-newslist.twig
+
+      # custom cropping option
+      cropping {
+        # What to append, if truncation happened
+        append = &hellip;
+        # If TRUE and division is in the middle of a word, the remains of that word is removed.
+        respectWordBoundaries = 1
+        # If TRUE the cropped string will respect HTML tags and entities. Technically that means, that cropHTML() is called rather than crop()
+        respectHtml = 1
+      }
+
+      media {
+        # remove EXT:news default image configuration
+        image >
+
+        defaultVariant {
+          displayMedia = 1
+          displayDummyIfNoMedia = 0
+          dummyImage = EXT:news/Resources/Public/Images/dummy-preview-image.png
+
+          imageConfig {
+            default {
+              width = 400c
+              height = 400
+              cropVariant = default
+            }
+          }
+
+          imageConfigPreLoad {
+            default {
+              width = 40c
+              height = 40c
+            }
+          }
+        }
+      }
+
+      displayCategoryTitle = {$tx_startertwignews.category.displayTitle}
+    }
+  }
+}

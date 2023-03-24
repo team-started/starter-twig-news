@@ -1,0 +1,21 @@
+# Configuration/Services.yaml
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  _instanceof:
+    StarterTeam\StarterTwigNews\DataProcessing\Records\NewsProcessorInterface:
+      tags: ['NewsDataProcessors']
+
+  StarterTeam\StarterTwigNews\:
+    resource: '../Classes/*'
+
+  StarterTeam\StarterTwigNews\DataProcessing\Records\NewsProcessorService:
+    arguments:
+      $newsProcessors: !tagged_iterator NewsDataProcessors
+
+  # Do not auto wire constructors of event classes
+  StarterTeam\StarterTwigNews\DataProcessing\Records\Event\CategoriesProcessorEvent:
+    autowire: false

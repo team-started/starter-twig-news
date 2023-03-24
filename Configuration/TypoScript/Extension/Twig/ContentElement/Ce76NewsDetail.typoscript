@@ -1,0 +1,33 @@
+plugin.tx_news {
+  settings {
+    detail {
+      templateName = {$tx_startertwig.ceFolderName}/m76-newsdetail/m76-newsdetail.twig
+
+      media {
+        # remove EXT:news default image configuration
+        image >
+
+        defaultVariant {
+          displayMedia = 1
+          displayDummyIfNoMedia = 0
+          dummyImage = EXT:news/Resources/Public/Images/dummy-preview-image.png
+
+          imageConfig {
+            default {
+              width = 100c
+              height = 100c
+              cropVariant = default
+            }
+          }
+
+          imageConfigPreLoad {
+            default {
+              width = 40c
+              height = 40c
+            }
+          }
+        }
+      }
+    }
+  }
+}

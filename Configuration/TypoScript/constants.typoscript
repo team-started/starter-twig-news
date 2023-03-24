@@ -1,0 +1,9 @@
+tx_startertwignews {
+  category {
+    // define css class selectors for EXT:news category links
+    linkClass =
+
+    // define if the category title is output in news list view
+    displayTitle = 0
+  }
+}
