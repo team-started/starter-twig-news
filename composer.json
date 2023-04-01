@@ -10,19 +10,19 @@
         }
     ],
     "require": {
-		"georgringer/news": "^9.4",
-		"php": "^7.4 || ^8.1",
+        "georgringer/news": "^9.4",
+        "php": "^7.4 || ^8.1",
         "typo3/cms-core": "^11.5",
-        "starterteam/starter-twig": "4.x-dev"
+        "starterteam/starter-twig": "^4.0 || 4.1-dev"
     },
-	"autoload": {
+    "autoload": {
         "psr-4": {
             "StarterTeam\\StarterTwigNews\\": "Classes"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "4.x-dev"
+            "dev-main": "4.1-dev"
         },
         "typo3/cms": {
             "extension-key": "starter_twig_news"
