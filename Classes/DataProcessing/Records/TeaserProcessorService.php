@@ -35,6 +35,7 @@ class TeaserProcessorService implements NewsProcessorInterface
         if ($cropConfiguration['respectHtml']) {
             $content = $this->contentObjectRenderer->cropHTML($stringToTruncate, $cropSetting);
         } else {
+            $stringToTruncate = strip_tags($stringToTruncate);
             $content = $this->contentObjectRenderer->crop($stringToTruncate, $cropSetting);
         }
 
