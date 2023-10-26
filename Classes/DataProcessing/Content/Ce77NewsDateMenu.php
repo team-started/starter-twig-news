@@ -96,7 +96,7 @@ class Ce77NewsDateMenu implements PtiDataProcessor
         ];
 
         $uri = $this->contentObjectRenderer->typoLink_URL($typoLinkConfig);
-        if (empty($uri)) {
+        if ($uri !== '') {
             return null;
         }
 

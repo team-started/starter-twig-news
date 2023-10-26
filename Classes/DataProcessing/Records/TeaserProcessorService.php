@@ -30,7 +30,7 @@ class TeaserProcessorService implements NewsProcessorInterface
         $cropSetting = $this->getCropSettings($cropConfiguration);
 
         $teaserData = $newsRecord->getTeaser();
-        $stringToTruncate = empty(trim($teaserData)) ? $newsRecord->getBodytext() : $teaserData;
+        $stringToTruncate = trim($teaserData) === '' ? $newsRecord->getBodytext() : $teaserData;
 
         if ($cropConfiguration['respectHtml']) {
             $content = $this->contentObjectRenderer->cropHTML($stringToTruncate, $cropSetting);

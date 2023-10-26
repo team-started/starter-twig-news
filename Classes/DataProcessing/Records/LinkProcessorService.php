@@ -35,7 +35,7 @@ class LinkProcessorService implements NewsProcessorInterface
         $typeLinkConfig = $this->getLinkConfigurationByNewsType($newsRecord, (int)$configuration['detailPid']);
         $typoLinkConfig = array_merge($typeLinkConfig, $basicLinkConfig);
         $uri = $this->contentObjectRenderer->typoLink_URL($typoLinkConfig);
-        if (empty($uri)) {
+        if ($uri === '') {
             return null;
         }
 

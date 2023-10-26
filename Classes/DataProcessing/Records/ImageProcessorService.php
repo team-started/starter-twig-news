@@ -59,7 +59,7 @@ class ImageProcessorService implements NewsProcessorInterface
         $mediaData = $this->previewOnly ? $newsRecord->getFalMediaPreviews() : $newsRecord->getFalMediaNonPreviews();
         $mediaData = $this->previewOnly ? $this->searchForPreviewAsset($mediaData) : $mediaData;
 
-        if (!empty($mediaData)) {
+        if ($mediaData !== null && $mediaData !== []) {
             foreach ($mediaData as $mediaFile) {
                 $mediaElement = $this->renderMediaService->processMediaElement(
                     $mediaFile->getOriginalResource(),
@@ -73,7 +73,7 @@ class ImageProcessorService implements NewsProcessorInterface
             }
         }
 
-        if (is_null($mediaElements) && $this->previewOnly && $this->useDummyImage && !empty($this->dummyImage)) {
+        if (is_null($mediaElements) && $this->previewOnly && $this->useDummyImage && $this->dummyImage !== '') {
             $mediaElements[] = [
                 'image' => [
                     'uid' => null,
