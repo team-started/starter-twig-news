@@ -8,7 +8,6 @@ use GeorgRinger\News\Domain\Model\Category;
 use GeorgRinger\News\Domain\Model\News;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use StarterTeam\StarterTwigNews\DataProcessing\Records\Event\CategoriesProcessorEvent;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class CategoriesProcessorService implements NewsProcessorInterface
@@ -48,7 +47,7 @@ class CategoriesProcessorService implements NewsProcessorInterface
                     $itemData[$property] = $category->_getProperty($property);
                 }
 
-                $typoLinkConfiguration = $this->getLinkConfiguration($category->getTitle(), $category->getUid(), $category->getSinglePid(), $configuration);
+                $typoLinkConfiguration = $this->getLinkConfiguration($category->getTitle(), $category->getUid(), $category->getShortcut(), $configuration);
                 $this->addLink($itemData, $typoLinkConfiguration);
 
                 $itemData['showTitle'] = (bool)$configuration['list']['displayCategoryTitle'];
@@ -63,7 +62,21 @@ class CategoriesProcessorService implements NewsProcessorInterface
 
     private function addLink(array &$itemData, array $linkConfiguration): void
     {
-        $itemData['link'] = $this->contentObjectRenderer->typoLink_URL($linkConfiguration);
+        $itemData['link'] = null;
+        if ($linkConfiguration !== []) {
+            $uri = $this->contentObjectRenderer->typoLink_URL($linkConfiguration);
+
+            if ($uri !== '') {
+                $itemData['link'] = [
+                    'config' => [
+                        'uri' => $uri,
+                        'target' => $linkConfiguration['target'],
+                        'class' => $linkConfiguration['class'],
+                        'title' => $linkConfiguration['title'],
+                    ],
+                ];
+            }
+        }
     }
 
     private function getLinkConfiguration(string $linkTitle, ?int $uid, int $singlePid, array $configuration): array
@@ -77,16 +90,6 @@ class CategoriesProcessorService implements NewsProcessorInterface
             'class' => (string)$configuration['categoryLinkClass'],
             'parameter' => $singlePid,
             'target' => '_self',
-            'additionalParams' => '&' . GeneralUtility::implodeArrayForUrl(
-                'tx_news_pi1',
-                [
-                    'overwriteDemand' => [
-                        'categories' => $uid,
-                    ],
-                    'controller' => 'Category',
-                    'action' => 'list',
-                ]
-            ),
         ];
     }
 }
