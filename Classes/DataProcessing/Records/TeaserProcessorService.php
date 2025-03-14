@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace StarterTeam\StarterTwigNews\DataProcessing\Records;
 
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class TeaserProcessorService implements NewsProcessorInterface
 {
-    private ContentObjectRenderer $contentObjectRenderer;
-
-    public function __construct(ContentObjectRenderer $contentObjectRenderer)
+    public function __construct(private readonly ContentObjectRenderer $contentObjectRenderer)
     {
-        $this->contentObjectRenderer = $contentObjectRenderer;
     }
 
+    #[Override]
     public function canHandle(string $processStatement): bool
     {
         return $processStatement === 'teaser';
@@ -24,7 +23,8 @@ class TeaserProcessorService implements NewsProcessorInterface
     /**
      * @return mixed
      */
-    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = [])
+    #[Override]
+    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = []): mixed
     {
         $cropConfiguration = $configuration['list']['cropping'];
         $cropSetting = $this->getCropSettings($cropConfiguration);

@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace StarterTeam\StarterTwigNews\DataProcessing\Records;
 
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use StarterTeam\StarterTwig\Processor\DateDataProcessor;
 
 class DateProcessorService implements NewsProcessorInterface
 {
-    private DateDataProcessor $dateDataProcessor;
-
-    public function __construct(DateDataProcessor $dateDataProcessor)
+    public function __construct(private readonly DateDataProcessor $dateDataProcessor)
     {
-        $this->dateDataProcessor = $dateDataProcessor;
     }
 
+    #[Override]
     public function canHandle(string $processStatement): bool
     {
         return $processStatement === 'date';
@@ -24,7 +23,8 @@ class DateProcessorService implements NewsProcessorInterface
     /**
      * @return mixed
      */
-    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = [])
+    #[Override]
+    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = []): mixed
     {
         return $this->dateDataProcessor->process($newsRecord->getDatetime(), $this->getDateFormatSettings($configuration));
     }

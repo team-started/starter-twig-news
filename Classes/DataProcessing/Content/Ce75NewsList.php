@@ -6,6 +6,7 @@ namespace StarterTeam\StarterTwigNews\DataProcessing\Content;
 
 use GeorgRinger\News\Domain\Model\Category;
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use PrototypeIntegration\PrototypeIntegration\Processor\PtiDataProcessor;
 use StarterTeam\StarterTwigNews\DataProcessing\Records\NewsProcessorService;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
@@ -13,8 +14,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class Ce75NewsList implements PtiDataProcessor
 {
-    protected NewsProcessorService $newsProcessorService;
-
     protected array $processorConfiguration = [
         'previewOnly' => true,
         'preferConfigurationIndex' => 'list',
@@ -26,11 +25,12 @@ class Ce75NewsList implements PtiDataProcessor
         'link' => true,
     ];
 
-    public function __construct(NewsProcessorService $newsProcessorService)
-    {
-        $this->newsProcessorService = $newsProcessorService;
+    public function __construct(
+        protected NewsProcessorService $newsProcessorService,
+    ) {
     }
 
+    #[Override]
     public function process(array $data, array $configuration): ?array
     {
         $renderedNewsRecordItems = $this->renderNewsItems($data['news'], $configuration, $this->processDataStatements, $this->processorConfiguration);
@@ -55,8 +55,12 @@ class Ce75NewsList implements PtiDataProcessor
     /**
      * @param QueryResult<News> $items
      */
-    protected function renderNewsItems(QueryResult $items, array $configuration, array $processedFields, array $processorConfiguration): ?array
-    {
+    protected function renderNewsItems(
+        QueryResult $items,
+        array $configuration,
+        array $processedFields,
+        array $processorConfiguration
+    ): ?array {
         $renderedItems = null;
 
         foreach ($items as $item) {

@@ -1,7 +1,7 @@
 plugin.tx_news {
   settings {
     detail {
-      templateName = {$tx_startertwig.ceFolderName}/m76-newsdetail/m76-newsdetail.twig
+      templateName = {$tx_startertwig.namespaces.ceFolderName}/m76-newsdetail/m76-newsdetail.twig
 
       media {
         # remove EXT:news default image configuration

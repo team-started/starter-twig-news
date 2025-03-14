@@ -16,11 +16,6 @@ class NewsProcessorService
         '2' => 'external',
     ];
 
-    /**
-     * @var iterable<NewsProcessorInterface> $newsProcessors
-     */
-    protected iterable $newsProcessors;
-
     protected array $defaultProcessData = [
         'uid' => true,
         'title' => true,
@@ -33,9 +28,12 @@ class NewsProcessorService
         'categories' => true,
     ];
 
-    public function __construct(iterable $newsProcessors)
-    {
-        $this->newsProcessors = $newsProcessors;
+    public function __construct(
+        /**
+         * @var iterable<NewsProcessorInterface> $newsProcessors
+         */
+        protected iterable $newsProcessors
+    ) {
     }
 
     public function process(News $newsRecord, array $processDataStatements, array $configuration = [], array $processorConfiguration = []): array
@@ -56,7 +54,7 @@ class NewsProcessorService
                 if ($processor->canHandle($processDataStatement)) {
                     try {
                         $processedTwigViewData[$processDataStatement] = $processor->render($newsRecord, $configuration, $processorConfiguration);
-                    } catch (InvalidNewsProcessorException $e) {
+                    } catch (InvalidNewsProcessorException) {
                         trigger_error(
                             sprintf('News record with uid "%s" could not processed', $newsRecord->getUid()),
                             E_USER_ERROR

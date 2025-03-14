@@ -6,6 +6,7 @@ namespace StarterTeam\StarterTwigNews\DataProcessing\Records;
 
 use GeorgRinger\News\Domain\Model\Category;
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -18,13 +19,11 @@ class LinkProcessorService implements NewsProcessorInterface
         'default' => 'getDetailPidFromDefaultDetailPid',
     ];
 
-    private ContentObjectRenderer $contentObjectRenderer;
-
-    public function __construct(ContentObjectRenderer $contentObjectRenderer)
+    public function __construct(private readonly ContentObjectRenderer $contentObjectRenderer)
     {
-        $this->contentObjectRenderer = $contentObjectRenderer;
     }
 
+    #[Override]
     public function canHandle(string $processStatement): bool
     {
         return $processStatement === 'link';
@@ -33,7 +32,8 @@ class LinkProcessorService implements NewsProcessorInterface
     /**
      * @return mixed
      */
-    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = [])
+    #[Override]
+    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = []): mixed
     {
         $basicLinkConfig = [
             'class' => '',
@@ -59,22 +59,17 @@ class LinkProcessorService implements NewsProcessorInterface
 
     private function getLinkConfigurationByNewsType(News $newsRecord, array $configuration): array
     {
-        switch (NewsProcessorService::NEWS_TYPE[$newsRecord->getType()]) {
-            case 'internal':
-                $typoLinkConfig = [
-                    'parameter' => $newsRecord->getInternalurl(),
-                    'target' => '_self',
-                ];
-                break;
-            case 'external':
-                $typoLinkConfig = [
-                    'parameter' => $newsRecord->getExternalurl(),
-                    'target' => '_blank',
-                ];
-                break;
-            default:
-                $typoLinkConfig = $this->getLinkToNewsItem($newsRecord, $configuration);
-        }
+        $typoLinkConfig = match (NewsProcessorService::NEWS_TYPE[$newsRecord->getType()]) {
+            'internal' => [
+                'parameter' => $newsRecord->getInternalurl(),
+                'target' => '_self',
+            ],
+            'external' => [
+                'parameter' => $newsRecord->getExternalurl(),
+                'target' => '_blank',
+            ],
+            default => $this->getLinkToNewsItem($newsRecord, $configuration),
+        };
 
         return $typoLinkConfig;
     }

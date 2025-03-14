@@ -1,7 +1,7 @@
 plugin.tx_news {
   settings {
     list {
-      templateName = {$tx_startertwig.ceFolderName}/m75-newslist/m75-newslist.twig
+      templateName = {$tx_startertwig.namespaces.ceFolderName}/m75-newslist/m75-newslist.twig
 
       # custom cropping option
       cropping {

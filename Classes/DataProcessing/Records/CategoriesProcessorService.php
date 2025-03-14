@@ -6,24 +6,20 @@ namespace StarterTeam\StarterTwigNews\DataProcessing\Records;
 
 use GeorgRinger\News\Domain\Model\Category;
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use StarterTeam\StarterTwigNews\DataProcessing\Records\Event\CategoriesProcessorEvent;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class CategoriesProcessorService implements NewsProcessorInterface
 {
-    private ContentObjectRenderer $contentObjectRenderer;
-
-    private EventDispatcherInterface $eventDispatcher;
-
     private array $properties = ['uid', 'title', 'description'];
 
-    public function __construct(ContentObjectRenderer $contentObjectRenderer, EventDispatcherInterface $eventDispatcher)
+    public function __construct(private readonly ContentObjectRenderer $contentObjectRenderer, private readonly EventDispatcherInterface $eventDispatcher)
     {
-        $this->contentObjectRenderer = $contentObjectRenderer;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
+    #[Override]
     public function canHandle(string $processStatement): bool
     {
         return $processStatement === 'categories';
@@ -32,7 +28,8 @@ class CategoriesProcessorService implements NewsProcessorInterface
     /**
      * @return mixed
      */
-    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = [])
+    #[Override]
+    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = []): mixed
     {
         $categories = $newsRecord->getCategories();
         if (is_null($categories)) {

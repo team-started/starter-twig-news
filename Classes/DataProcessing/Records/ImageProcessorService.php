@@ -6,6 +6,7 @@ namespace StarterTeam\StarterTwigNews\DataProcessing\Records;
 
 use GeorgRinger\News\Domain\Model\FileReference;
 use GeorgRinger\News\Domain\Model\News;
+use Override;
 use PrototypeIntegration\PrototypeIntegration\Processor\ImageProcessor;
 use StarterTeam\StarterTwig\Service\RenderMediaService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -13,10 +14,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ImageProcessorService implements NewsProcessorInterface
 {
-    protected RenderMediaService $renderMediaService;
-
-    protected ImageProcessor $imageProcessor;
-
     private array $defaultProcessorOptions = [
         'previewOnly' => true,
         'preferConfigurationIndex' => 'list',
@@ -32,12 +29,13 @@ class ImageProcessorService implements NewsProcessorInterface
 
     private string $dummyImage = '';
 
-    public function __construct(RenderMediaService $renderMediaService, ImageProcessor $imageProcessor)
-    {
-        $this->renderMediaService = $renderMediaService;
-        $this->imageProcessor = $imageProcessor;
+    public function __construct(
+        protected RenderMediaService $renderMediaService,
+        protected ImageProcessor $imageProcessor,
+    ) {
     }
 
+    #[Override]
     public function canHandle(string $processStatement): bool
     {
         return GeneralUtility::inList('listImage,media', $processStatement);
@@ -51,7 +49,8 @@ class ImageProcessorService implements NewsProcessorInterface
      *
      * @return mixed
      */
-    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = [])
+    #[Override]
+    public function render(News $newsRecord, array $configuration = [], array $processorConfiguration = []): mixed
     {
         $this->setConfiguration($configuration, $processorConfiguration);
 
